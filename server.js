@@ -15,9 +15,6 @@ type Todo {
   task: String
   completed: Boolean
 }
-
-
-
 `;
 
 const resolvers = {
