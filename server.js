@@ -1,18 +1,24 @@
+//bring in apollo server
 const { ApolloServer, gql }  = require('apollo-server');
 
-const todos = [
-  { task: 'Wash car', completed: false},
-  { task: 'Clean room', completed: true}
-];
+//bring in mongoose to make connection to db
+const mongoose = require('mongoose');
+
+//grab variables from dotenv file
+require('dotenv').config({ path: 'variables.env' });
+
+//setup connection to db
+mongoose.connect(process.env.MONGO_URI, { 
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('DB connected'))
+.catch(err => console.log(err))
 
 const typeDefs = gql`
 
 type Query {
   getTodos: [Todo]
-}
-
-type Mutation {
-  addTodo(task: String, completed: Boolean): Todo
 }
 
 type Todo {
@@ -21,26 +27,8 @@ type Todo {
 }
 `;
 
-const resolvers = {
-  Query: {
-    getTodos: () => todos
-  },
-  Mutation: {
-    addTodo: (_, { task, completed }) => {
-      const todo = { 
-        task, 
-        completed 
-      }
-
-      todos.push(todo);
-      return todo;
-    } 
-  }
-}
-
 const server = new ApolloServer({
-  typeDefs,
-  resolvers
+  typeDefs
 });
 
 server.listen().then(({ url }) => {
