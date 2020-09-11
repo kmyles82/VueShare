@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 //grab variables from dotenv file
 require('dotenv').config({ path: 'variables.env' });
 
+const User = require('./models/User')
+const Post = require('./models/Post')
+
 //setup connection to db
 mongoose.connect(process.env.MONGO_URI, { 
   useNewUrlParser: true,
@@ -14,6 +17,8 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log('DB connected'))
 .catch(err => console.log(err))
+
+mongoose.set('useCreateIndex', true)
 
 const typeDefs = gql`
 
@@ -28,7 +33,11 @@ type Todo {
 `;
 
 const server = new ApolloServer({
-  typeDefs
+  typeDefs,
+  context: {
+    User,
+    Post
+  }
 });
 
 server.listen().then(({ url }) => {
