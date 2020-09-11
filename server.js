@@ -23,13 +23,9 @@ mongoose.set('useCreateIndex', true)
 const typeDefs = gql`
 
 type Query {
-  getTodos: [Todo]
+  dummy: String
 }
 
-type Todo {
-  task: String
-  completed: Boolean
-}
 `;
 
 const server = new ApolloServer({
