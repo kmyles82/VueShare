@@ -18,6 +18,21 @@ module.exports = {
       }).save();
 
       return newUser;
+    },
+
+    addPost: async (_, { title, imageUrl, categories, description,  createdId }, { Post }) => {
+
+      const newPost = await new Post({
+        title,
+        imageUrl,
+        categories,
+        description,
+        createdBy: createdId
+      }).save();
+
+      return newPost;
+
+
     }
   }
 }
